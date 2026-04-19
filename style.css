@@ -240,3 +240,58 @@ button:active {
 .smoke {
     background: linear-gradient(to right, #757f9a, #d7dde8);
 }
+/* 🌧️ Rain Animation Styles */
+.rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Allows clicking through the rain */
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* Ensure the widget stays on top of the rain */
+.weather-widget {
+    position: relative;
+    z-index: 1;
+}
+
+.drop {
+    position: absolute;
+    bottom: 100%;
+    width: 2px;
+    height: 25px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.7));
+    animation: drop linear infinite;
+}
+
+@keyframes drop {
+    0% {
+        transform: translateY(0vh);
+    }
+    100% {
+        transform: translateY(100vh);
+    }
+}
+/* ❄️ Snow Animation Styles */
+.snowflake {
+    position: absolute;
+    top: -10px;
+    background: white;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+    /* Two animations: one for falling down, one for swaying left/right */
+    animation: fall linear infinite, sway ease-in-out infinite alternate;
+}
+
+@keyframes fall {
+    0% { top: -10vh; }
+    100% { top: 100vh; }
+}
+
+@keyframes sway {
+    0% { transform: translateX(-15px); }
+    100% { transform: translateX(15px); }
+}

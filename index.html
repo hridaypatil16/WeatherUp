@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<script>
+async function getWeather() {
+    const city = document.getElementById("city").value;
+    const apiKey = "1fdf223d6f678e146e1641f2a72c60c8";
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // 🔴 Check if city is invalid
+    if (data.cod !== 200) {
+        alert("City not found!");
+        return;
+    }
+
+    // ✅ Update UI
+    document.getElementById("cityName").innerText = data.name;
+    document.getElementById("temp").innerText = data.main.temp + "°C";
+    document.getElementById("desc").innerText = data.weather[0].description;
+    document.getElementById("humidity").innerText = "Humidity: " + data.main.humidity + "%";
+
+  const iconCode = data.weather[0].icon;  // ✅ ONLY ONCE
+
+// 🌤️ Icon
+const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+document.getElementById("weatherIcon").src = iconUrl;
+
+// 🌈 Background
+const weatherMain = data.weather[0].main.toLowerCase();
+
+document.body.className = "";
+
+if (weatherMain.includes("clear")) {
+    document.body.classList.add("clear");
+} 
+else if (weatherMain.includes("cloud")) {
+    document.body.classList.add("clouds");
+} 
+else if (weatherMain.includes("rain")) {
+    document.body.classList.add("rain");
+}
+
+// 🌙 Night
+if (iconCode.includes("n")) {
+    document.body.classList.add("night");
+}
+else if (weatherMain.includes("smoke") || 
+         weatherMain.includes("haze") || 
+         weatherMain.includes("mist")) {
+    document.body.classList.add("clouds");
+}
+}
+</script>
+<body>
+    <div class="weather-widget">
+        <div class="header">
+            <i class="ph ph-cloud-sun"></i>
+            <h1>Weather</h1>
+        </div>
+        
+        <div class="search-container">
+            <div class="input-wrapper">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" id="city" placeholder="Search city">
+            </div>
+            <button onclick="getWeather()">Get Weather</button>
+        </div>
+        
+        <div class="weather-display fade-in">
+            <div id="cityName" class="city-name">San Francisco</div>
+            <img id="weatherIcon" width="100">
+            <div id="temp" class="temperature">72°</div>
+            <div class="condition">
+                <i class="ph ph-cloud"></i>
+                <span id="desc" class="description">Mostly Cloudy</span>
+            </div>
+            <div class="humidity-container">
+                <i class="ph ph-drop"></i>
+                <span id="humidity">45%</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
